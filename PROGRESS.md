@@ -58,7 +58,7 @@
 - Phase 1: COMPLETE on 2026-11-20; all eight database tests passed.
 - Phase 2: COMPLETE on 2026-11-20; 21 automated tests and real HTTP checks passed.
 - Phases 3-5: NOT STARTED; require approval before each phase.
-- GitHub sync: Phase 1 commit `a2ae26c` was pushed and verified on the required remote branch. Phase 2 is verified and ready to commit and push.
+- GitHub sync: Phase 1 commit `a2ae26c` and Phase 2 implementation commit `0969603` were pushed and verified on `origin/revert-3-fix-vercel-postgres-migration`. This tracker records the completed sync.
 
 ## Phase 1 detailed plan
 1. Inspect the assignment, available files, repository, and local Python runtime.
@@ -117,7 +117,7 @@
 - Name, city, and court are required and limited to 100 characters. Date must be a real YYYY-MM-DD value. Skill must be Beginner, Intermediate, or Advanced. All fields are trimmed.
 
 ## Phase 1 Git commands
-Run from the project root; the assistant is authorized to execute these commands:
+Executed successfully from the project root; retained as the Phase 1 command record:
 ```powershell
 git status
 git add .
@@ -126,7 +126,7 @@ git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
 ## Phase 2 Git commands
-Run from the project root; assistant execution is authorized:
+Executed successfully from the project root; retained as the Phase 2 command record:
 ```powershell
 git status
 git add .
@@ -135,6 +135,6 @@ git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
 ## Upcoming steps
-1. Commit and push the verified Phase 2 implementation, then verify the remote branch.
-2. Request explicit approval before starting Phase 3; no GUI code has been written.
-3. After approval, read this tracker, present the detailed Phase 3 plan, and build only the Tkinter GUI and HTTP client.
+1. Await explicit approval before starting Phase 3; no GUI code has been written.
+2. After approval, read this tracker, present the detailed Phase 3 plan, and build only the Tkinter GUI and HTTP client.
+3. Verify and push Phase 3, update this tracker, and request approval before Phase 4.
