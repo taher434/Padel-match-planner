@@ -1,0 +1,30 @@
+# Local Python environments and generated caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local data and generated reports
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
+reports/
+
+# Private configuration and keys
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local verification tools and supplied assignment reference
+.tools/
+Advanced_Programming_462_Individual_Project.docx
