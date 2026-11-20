@@ -54,12 +54,13 @@
 - Exact deadline and presentation schedule come from Blackboard; do not invent them.
 
 ## Phase status
-- Completed phases: Phases 1, 2, and 3.
+- Completed phases: Phases 1, 2, 3, and 4.
 - Phase 1: COMPLETE on 2026-11-20; all eight database tests passed.
 - Phase 2: COMPLETE on 2026-11-20; 21 automated tests and real HTTP checks passed.
 - Phase 3: COMPLETE on 2026-11-20; all 44 automated tests, live GUI/server checks, and visible-window inspection passed.
-- Phases 4-5: NOT STARTED; require approval before each phase.
-- GitHub sync: Phase 1 commit `a2ae26c`, Phase 2 implementation commit `0969603`, and Phase 3 implementation commit `35e7a44` were pushed and verified on `origin/revert-3-fix-vercel-postgres-migration`. This tracker records the completed sync.
+- Phase 4: COMPLETE on 2026-11-20; all 52 automated tests and the live report/GUI/server checks passed.
+- Phase 5: NOT STARTED; requires approval.
+- GitHub sync: Phase 1 commit `a2ae26c`, Phase 2 implementation commit `0969603`, and Phase 3 implementation commit `35e7a44` were pushed and verified on the required branch. Phase 4 is verified and ready to commit and push.
 
 ## Phase 1 detailed plan
 1. Inspect the assignment, available files, repository, and local Python runtime.
@@ -91,6 +92,16 @@
 6. Keep form/table state after failed requests. Allow retries in the same window when Flask restarts. Clear a successfully submitted form before refreshing to prevent accidental duplicate submissions.
 7. Add focused client and GUI checks, then verify real Flask/GUI communication and inspect the visible window using the computer-use skill.
 8. Update this tracker, commit/push Phase 3, verify GitHub matches local HEAD, and request approval before Phase 4.
+
+## Phase 4 detailed plan
+1. Add `report_helper.py` with three direct functions: write the report, fetch records/start the worker, and print the final result from main.
+2. Fetch `/matches/export` using the existing HTTP client; keep all database access inside Flask. Failed requests must not overwrite an existing report.
+3. Start exactly one `threading.Thread` with `.start()` to write all six match fields to `reports/padel_matches_report.txt`. Use `with open(..., encoding="utf-8")` and a helpful empty-list message.
+4. Catch expected file errors inside the worker and share the outcome through a small result dictionary. Call `.join()` before reading that result and reporting success or failure.
+5. Add focused tests for report content, empty data, connection failures, invalid export data, expected file errors, actual thread execution, and terminal exit status.
+6. Verify a real report against Flask, including UTF-8 content, server restart/persistence, and failure without overwriting an older report.
+7. Create `TEST_CHECKLIST.md` with repeatable end-to-end steps, actual results, and a clear distinction between completed checks and Phase 5 submission work.
+8. Update this tracker, commit/push Phase 4, verify the remote branch, and request approval before Phase 5.
 
 ## Inspection findings
 - The workspace initially contained only the assignment DOCX; there was no Git repository or PROGRESS.md.
@@ -124,7 +135,14 @@
 - PASS: canceling deletion sent no delete request; confirming deletion removed only the selected temporary match. A stale selection produced Flask's JSON 404 message in the GUI.
 - PASS: visible native-window inspection showed readable labels, five inputs, all action buttons, six table columns, scrollbars, and status messages without clipping. The native Refresh button was clicked and successfully reloaded the table.
 - The live GUI checks used isolated temporary server data through ignored `.tools/verify_gui_live.py`. The temporary GUI and Flask server were closed afterward; project records were untouched.
-- The report helper and final submission documentation remain for Phases 4 and 5.
+- Created `report_helper.py`, `tests/test_report_helper.py`, and `TEST_CHECKLIST.md` for Phase 4.
+- PASS: all 52 automated tests (8 database, 13 API, 11 HTTP client, 12 GUI, and 8 report/thread/file tests).
+- Report checks cover all saved fields, UTF-8 Arabic text, empty records, failed requests preserving an older report, malformed export data, file/path errors, one real worker thread, and matching terminal exit status.
+- PASS: real report subprocesses fetched Flask JSON and saved current records, UTF-8 text, and empty reports. Running from another working folder still used the report helper's own reports directory.
+- PASS: both Flask and Tkinter were stopped and restarted; the recreated GUI showed unchanged saved records. A separate outage check retained the same GUI root and input, then retried successfully after Flask restarted.
+- PASS: stopping Flask made the report CLI exit with status 1 without changing the previous report file. Restarting Flask restored successful reporting. A real file error after fetching records returned a clear failure.
+- PASS: live GUI Add/View/Filter/Edit/Delete, 400/404 messages, cancel/confirm deletion, and the empty final state. Live checks used temporary records/reports and closed their temporary processes; project data was untouched.
+- `TEST_CHECKLIST.md` records actual results, distinguishes simulated timeouts/dialog choices from live checks, and provides repeatable application/report steps. Final README, credits, demo/Q&A materials, slides, and submission preparation remain for Phase 5.
 
 ## Phase 2 backend usage
 - With normal Python: `python -m pip install -r requirements.txt`, then `python app.py`.
@@ -144,7 +162,14 @@
 - Filter by city or press Enter in the city filter input. Show All clears the filter. Refresh retries the current filter after a connection failure.
 - On failed requests, form contents and displayed rows remain available. Successfully saved input is cleared before refreshing; if that refresh fails, the message clearly states that saving already succeeded.
 - Trace an Add action: `gui.PadelPlanner.add_match` -> `read_form` -> `client.add_match` -> `send_request` -> `app.add_match` -> `validate_match` -> `MatchDatabase.add_match` -> Flask JSON -> GUI refresh/status.
-- Run all 44 tests with `python -m unittest discover -s tests -v`, or the portable-runtime command recorded above.
+- Run all 52 tests with `python -m unittest discover -s tests -v`, or the portable-runtime command recorded above.
+
+## Phase 4 report usage and code flow
+- Start Flask first. Run `python report_helper.py`, or `& '.tools/python/python.exe' report_helper.py` in the prepared local workspace.
+- Default report: `reports/padel_matches_report.txt`, located beside the source files regardless of the current working folder. The reports directory is created automatically and is ignored by Git.
+- A successful run replaces the previous report with a fresh snapshot of all saved matches. An empty database produces a useful empty report. A failed HTTP request leaves an older report unchanged.
+- Flow: `save_report` -> `client.send_request("/matches/export")` -> one `threading.Thread(target=write_report)` -> `.start()` -> UTF-8 file writing with `with open` -> `.join()` -> result dictionary -> `main` prints success/failure.
+- `write_report()` catches expected `OSError` file failures. The helper returns exit status 0 on success or 1 on failure.
 
 ## Phase 1 Git commands
 Executed successfully from the project root; retained as the Phase 1 command record:
@@ -173,7 +198,16 @@ git commit -m "Complete phase 3 Tkinter GUI and HTTP client"
 git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
+## Phase 4 Git commands
+Run from the project root; assistant execution is authorized:
+```powershell
+git status
+git add .
+git commit -m "Complete phase 4 threaded report helper and verification checklist"
+git push -u origin revert-3-fix-vercel-postgres-migration
+```
+
 ## Upcoming steps
-1. Await explicit approval before Phase 4; no report helper has been written.
-2. After approval, read this tracker, present the detailed Phase 4 plan, and implement the threaded report helper plus the end-to-end checklist.
-3. Verify and push Phase 4, update this tracker, and request approval before Phase 5.
+1. Commit/push the verified Phase 4 files and verify the remote branch.
+2. Request explicit approval before starting Phase 5.
+3. After approval, read this tracker, present the detailed Phase 5 plan, and prepare the final documentation, demonstration, and submission materials.
