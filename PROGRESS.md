@@ -59,7 +59,7 @@
 - Phase 2: COMPLETE on 2026-11-20; 21 automated tests and real HTTP checks passed.
 - Phase 3: COMPLETE on 2026-11-20; all 44 automated tests, live GUI/server checks, and visible-window inspection passed.
 - Phases 4-5: NOT STARTED; require approval before each phase.
-- GitHub sync: Phase 1 commit `a2ae26c` and Phase 2 implementation commit `0969603` were pushed and verified on the required branch. Phase 3 is verified and ready to commit and push.
+- GitHub sync: Phase 1 commit `a2ae26c`, Phase 2 implementation commit `0969603`, and Phase 3 implementation commit `35e7a44` were pushed and verified on `origin/revert-3-fix-vercel-postgres-migration`. This tracker records the completed sync.
 
 ## Phase 1 detailed plan
 1. Inspect the assignment, available files, repository, and local Python runtime.
@@ -164,16 +164,16 @@ git commit -m "Complete phase 2 Flask match API and validation"
 git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
-## Upcoming steps
-1. Commit/push the verified Phase 3 files and verify the remote branch.
-2. Request explicit approval before Phase 4; no report helper has been written.
-3. After approval, read this tracker, present the detailed Phase 4 plan, and implement the threaded report helper plus the end-to-end checklist.
-
 ## Phase 3 Git commands
-Run from the project root; assistant execution is authorized:
+Executed successfully from the project root; retained as the Phase 3 command record:
 ```powershell
 git status
 git add .
 git commit -m "Complete phase 3 Tkinter GUI and HTTP client"
 git push -u origin revert-3-fix-vercel-postgres-migration
 ```
+
+## Upcoming steps
+1. Await explicit approval before Phase 4; no report helper has been written.
+2. After approval, read this tracker, present the detailed Phase 4 plan, and implement the threaded report helper plus the end-to-end checklist.
+3. Verify and push Phase 4, update this tracker, and request approval before Phase 5.
