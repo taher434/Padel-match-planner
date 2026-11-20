@@ -54,11 +54,12 @@
 - Exact deadline and presentation schedule come from Blackboard; do not invent them.
 
 ## Phase status
-- Completed phases: Phases 1 and 2.
+- Completed phases: Phases 1, 2, and 3.
 - Phase 1: COMPLETE on 2026-11-20; all eight database tests passed.
 - Phase 2: COMPLETE on 2026-11-20; 21 automated tests and real HTTP checks passed.
-- Phases 3-5: NOT STARTED; require approval before each phase.
-- GitHub sync: Phase 1 commit `a2ae26c` and Phase 2 implementation commit `0969603` were pushed and verified on `origin/revert-3-fix-vercel-postgres-migration`. This tracker records the completed sync.
+- Phase 3: COMPLETE on 2026-11-20; all 44 automated tests, live GUI/server checks, and visible-window inspection passed.
+- Phases 4-5: NOT STARTED; require approval before each phase.
+- GitHub sync: Phase 1 commit `a2ae26c` and Phase 2 implementation commit `0969603` were pushed and verified on the required branch. Phase 3 is verified and ready to commit and push.
 
 ## Phase 1 detailed plan
 1. Inspect the assignment, available files, repository, and local Python runtime.
@@ -81,12 +82,22 @@
 8. Verify real HTTP requests on port 5050 with urllib, including UTF-8 form data, JSON errors, city filtering, export, and persistence after restarting Flask.
 9. Update this tracker, stage/commit/push Phase 2, verify GitHub received the commit, and stop for Phase 3 approval.
 
+## Phase 3 detailed plan
+1. Create `client.py` with one direct HTTP request function and small list/add/edit/delete wrappers; keep the server address fixed and all SQLite work in Flask.
+2. Use `urlopen`, UTF-8 `urlencode` form bodies, `json.loads`, and `timeout=5`. Catch HTTPError before URLError, read JSON 400/404 bodies, handle direct/wrapped socket timeouts, and return clear errors without crashing.
+3. Create one simple `PadelPlanner` GUI class in `gui.py` to hold widgets and selection state, with ordinary methods and no inheritance hierarchy.
+4. Provide labeled name/city/court/date inputs, a read-only skill dropdown, a match table with scrollbars, city filtering, Show All, Refresh, Add, Save Changes, Delete, and New/Clear Form.
+5. Populate the form from a selected row, enable Edit/Delete only for a selection, and confirm deletion before sending a POST.
+6. Keep form/table state after failed requests. Allow retries in the same window when Flask restarts. Clear a successfully submitted form before refreshing to prevent accidental duplicate submissions.
+7. Add focused client and GUI checks, then verify real Flask/GUI communication and inspect the visible window using the computer-use skill.
+8. Update this tracker, commit/push Phase 3, verify GitHub matches local HEAD, and request approval before Phase 4.
+
 ## Inspection findings
 - The workspace initially contained only the assignment DOCX; there was no Git repository or PROGRESS.md.
 - GitHub ref queries returned no branches or other refs. The local target branch was initialized and `origin` now points to the requested repository.
 - The assignment was read without modification and agrees with the requested Tkinter/Flask/SQLite architecture.
 - No Python command was found on PATH. Official portable Python 3.13.12 was downloaded into Git-ignored `.tools/` for verification without a system installation; its SHA-256 matched the official release.
-- Flask and its dependencies are installed only in ignored `.tools/packages/`; the portable runtime can run and test this backend. A full Python installation with Tkinter is still needed for the GUI phase.
+- Flask and its dependencies are installed only in ignored `.tools/packages/`. The matching official Python 3.13.12 Tkinter component was downloaded, its Python Software Foundation signature verified, and its files extracted into ignored local tools without a system Python installation. The local runtime now supports both Flask and Tkinter 8.6.
 
 ## Verification results
 - Created `db.py`, `requirements.txt`, `.gitignore`, and `tests/test_db.py`.
@@ -104,7 +115,16 @@
 - PASS: real HTTP on port 5050 using `urlopen`, `urlencode(...).encode("utf-8")`, `timeout=5`, and `json.loads`; verified add/view/filter/edit/delete/export and JSON 400/404 bodies.
 - PASS: Arabic city text, connection failure while Flask was stopped, successful requests after restarting Flask, and data persistence across an actual Flask process restart.
 - The real HTTP check used temporary copies of `app.py`/`db.py` and a temporary database; no project records were created or modified. Its local verification script is ignored at `.tools/verify_http.py`.
-- GUI recovery, delete confirmation, and report output remain for Phases 3 and 4; these have not been claimed as tested.
+- Created Phase 3 files `client.py`, `gui.py`, `tests/test_client.py`, and `tests/test_gui.py`.
+- PASS: all 44 automated tests (8 database, 13 API, 11 HTTP client, 12 Tkinter GUI), using real hidden Tkinter widgets for GUI state checks.
+- Client checks cover UTF-8 POST data, encoded city queries, timeout=5, POST deletion with an empty body, JSON 400/404 errors, unavailable-server retry, direct/wrapped timeouts, and invalid replies.
+- GUI checks cover form/selection state, filtering, Add/Edit, errors preserving input, cancel/confirm deletion, stale-record errors, and accurate feedback when saving succeeds but the list refresh fails.
+- PASS: actual Tkinter callbacks called the real HTTP client and Flask server on port 5050 for Add, View, Filter, Edit, Delete, and server validation messages (400/404).
+- PASS: Flask was stopped and restarted while the SAME Tkinter root stayed open. Failed actions kept typed input and existing rows; the same window retried and saved successfully after restart.
+- PASS: canceling deletion sent no delete request; confirming deletion removed only the selected temporary match. A stale selection produced Flask's JSON 404 message in the GUI.
+- PASS: visible native-window inspection showed readable labels, five inputs, all action buttons, six table columns, scrollbars, and status messages without clipping. The native Refresh button was clicked and successfully reloaded the table.
+- The live GUI checks used isolated temporary server data through ignored `.tools/verify_gui_live.py`. The temporary GUI and Flask server were closed afterward; project records were untouched.
+- The report helper and final submission documentation remain for Phases 4 and 5.
 
 ## Phase 2 backend usage
 - With normal Python: `python -m pip install -r requirements.txt`, then `python app.py`.
@@ -115,6 +135,16 @@
 - POST `/matches/add` returns 201 with `success`, `message`, and `match_id`. POST edit/delete return 200 with `success` and `message`.
 - Invalid input returns JSON 400; unknown IDs/routes return JSON 404; incorrect methods return JSON 405; database failures return a clear JSON 500.
 - Name, city, and court are required and limited to 100 characters. Date must be a real YYYY-MM-DD value. Skill must be Beginner, Intermediate, or Advanced. All fields are trimmed.
+
+## Phase 3 GUI usage and code flow
+- Start Flask first in one terminal: `python app.py`. In another terminal, run `python gui.py`.
+- Available local runtime: `& '.tools/python/python.exe' app.py`, then `& '.tools/python/python.exe' gui.py` in another terminal.
+- The window automatically loads matches. No URL entry or manual request construction is needed.
+- Fill the form and click Add Match. Select a table row to edit or delete it. New / Clear Form returns to Add mode. Delete asks for confirmation using the saved record's name and ID.
+- Filter by city or press Enter in the city filter input. Show All clears the filter. Refresh retries the current filter after a connection failure.
+- On failed requests, form contents and displayed rows remain available. Successfully saved input is cleared before refreshing; if that refresh fails, the message clearly states that saving already succeeded.
+- Trace an Add action: `gui.PadelPlanner.add_match` -> `read_form` -> `client.add_match` -> `send_request` -> `app.add_match` -> `validate_match` -> `MatchDatabase.add_match` -> Flask JSON -> GUI refresh/status.
+- Run all 44 tests with `python -m unittest discover -s tests -v`, or the portable-runtime command recorded above.
 
 ## Phase 1 Git commands
 Executed successfully from the project root; retained as the Phase 1 command record:
@@ -135,6 +165,15 @@ git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
 ## Upcoming steps
-1. Await explicit approval before starting Phase 3; no GUI code has been written.
-2. After approval, read this tracker, present the detailed Phase 3 plan, and build only the Tkinter GUI and HTTP client.
-3. Verify and push Phase 3, update this tracker, and request approval before Phase 4.
+1. Commit/push the verified Phase 3 files and verify the remote branch.
+2. Request explicit approval before Phase 4; no report helper has been written.
+3. After approval, read this tracker, present the detailed Phase 4 plan, and implement the threaded report helper plus the end-to-end checklist.
+
+## Phase 3 Git commands
+Run from the project root; assistant execution is authorized:
+```powershell
+git status
+git add .
+git commit -m "Complete phase 3 Tkinter GUI and HTTP client"
+git push -u origin revert-3-fix-vercel-postgres-migration
+```
