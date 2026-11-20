@@ -36,7 +36,7 @@
 - Required features: Add, View, Filter by City, Edit, Delete with confirmation, persistent storage, and JSON export.
 - City filtering is the topic-specific extra feature. Skill level also helps players find suitable matches.
 - Planned routes: GET `/matches`, GET `/matches?city=...`, GET `/matches/export`, POST `/matches/add`, POST `/matches/<int:match_id>/edit`, POST `/matches/<int:match_id>/delete`.
-- Phase 2 will use `g` for one database helper per request and teardown to close it. Table setup runs when Flask starts.
+- Phase 2 uses `g` for one database helper per request and teardown to close it. Running `python app.py` sets up the table before starting Flask.
 
 ## Full project plan
 1. Phase 1: Create this tracker, a flat project structure, `.gitignore`, `requirements.txt`, and `db.py`. Verify table creation, CRUD, city filtering, unknown IDs, and persistence using temporary databases.
@@ -54,11 +54,11 @@
 - Exact deadline and presentation schedule come from Blackboard; do not invent them.
 
 ## Phase status
-- Completed phases: Phase 1.
+- Completed phases: Phases 1 and 2.
 - Phase 1: COMPLETE on 2026-11-20; all eight database tests passed.
-- Phase 2: APPROVED by the user; starts after the Phase 1 push succeeds.
+- Phase 2: COMPLETE on 2026-11-20; 21 automated tests and real HTTP checks passed.
 - Phases 3-5: NOT STARTED; require approval before each phase.
-- GitHub sync: Phase 1 is ready to commit and push; assistant execution is authorized.
+- GitHub sync: Phase 1 commit `a2ae26c` was pushed and verified on the required remote branch. Phase 2 is verified and ready to commit and push.
 
 ## Phase 1 detailed plan
 1. Inspect the assignment, available files, repository, and local Python runtime.
@@ -70,12 +70,23 @@
 7. Check empty results, repeated setup, persistence, case-insensitive city filtering, safe SQL parameters, selected-record updates/deletes, unknown IDs, and connection cleanup.
 8. Record actual results, output the complete tracker and exact Git commands, and request Phase 2 approval.
 
+## Phase 2 detailed plan
+1. Keep one clear `app.py` with a Flask app, ordinary functions, and route decorators; reuse `MatchDatabase` without adding a class hierarchy or extra frameworks.
+2. Add `initialize_database()` to create the table without removing records before `app.run(host="127.0.0.1", port=5050)`. Tests supply an isolated database path through Flask configuration.
+3. Use `get_database()` and Flask `g` to open one connection per request; close it in `teardown_appcontext`, including failed requests.
+4. Validate form fields on the server: strip surrounding spaces, require all five fields, limit name/city/court to 100 characters, require a real date exactly in YYYY-MM-DD format, and restrict skill level to the three planned choices.
+5. Implement the planned GET list/city-filter/export routes and POST add/edit/delete routes. Use consistent JSON containing `success` and either `matches`, `match_id`, or `message`.
+6. Return 201 for a new match, 200 for other successful actions, 400 for invalid input, 404 for unknown IDs/routes, and clear JSON for database errors. Restrict mutation routes to POST.
+7. Install Flask only into ignored local verification tools, then run the existing database tests and focused API tests with temporary databases.
+8. Verify real HTTP requests on port 5050 with urllib, including UTF-8 form data, JSON errors, city filtering, export, and persistence after restarting Flask.
+9. Update this tracker, stage/commit/push Phase 2, verify GitHub received the commit, and stop for Phase 3 approval.
+
 ## Inspection findings
 - The workspace initially contained only the assignment DOCX; there was no Git repository or PROGRESS.md.
 - GitHub ref queries returned no branches or other refs. The local target branch was initialized and `origin` now points to the requested repository.
 - The assignment was read without modification and agrees with the requested Tkinter/Flask/SQLite architecture.
 - No Python command was found on PATH. Official portable Python 3.13.12 was downloaded into Git-ignored `.tools/` for verification without a system installation; its SHA-256 matched the official release.
-- This portable runtime is a local verification tool. A full Python installation with pip and Tkinter is still needed for the later application phases.
+- Flask and its dependencies are installed only in ignored `.tools/packages/`; the portable runtime can run and test this backend. A full Python installation with Tkinter is still needed for the GUI phase.
 
 ## Verification results
 - Created `db.py`, `requirements.txt`, `.gitignore`, and `tests/test_db.py`.
@@ -85,9 +96,25 @@
 - Covered: empty lists and unknown IDs; all saved fields; city filtering and date order; changes limited to the selected record; repeated setup and persistence after reopening; quotes, Arabic text, and SQL-like input; independent connections and cleanup; no reuse of deleted IDs.
 - Command used: `& '.tools/python/python.exe' -m unittest discover -s tests -v`.
 - With a normal Python installation: `python -m unittest discover -s tests -v`.
-- `git status` confirms the exact requested local branch and the expected new files; the assignment DOCX is ignored and remains unchanged.
+- `git status` confirms the exact requested local branch; the assignment DOCX is ignored and remains unchanged.
 - Git ignore checks confirm that environments, caches, local tools, databases, generated reports, and `.env` are excluded.
-- Flask routes, server validation, GUI behavior, and report output are not implemented or tested yet; they belong to later phases.
+- Created `app.py` and `tests/test_app.py`. The backend uses the existing database helper, startup setup, per-request connections, cleaned form data, consistent JSON, and the planned routes.
+- PASS: all 21 automated tests (8 database tests and 13 API tests) on Python 3.13.12 with Flask 3.1.3.
+- API checks cover empty lists/export, all saved fields, missing/blank fields, text limits, date/skill validation, city filtering, edit/delete isolation, invalid edits preserving data, unknown/deleted IDs, HTTP method restrictions, repeated setup, connection cleanup after success/failure, and database-error recovery.
+- PASS: real HTTP on port 5050 using `urlopen`, `urlencode(...).encode("utf-8")`, `timeout=5`, and `json.loads`; verified add/view/filter/edit/delete/export and JSON 400/404 bodies.
+- PASS: Arabic city text, connection failure while Flask was stopped, successful requests after restarting Flask, and data persistence across an actual Flask process restart.
+- The real HTTP check used temporary copies of `app.py`/`db.py` and a temporary database; no project records were created or modified. Its local verification script is ignored at `.tools/verify_http.py`.
+- GUI recovery, delete confirmation, and report output remain for Phases 3 and 4; these have not been claimed as tested.
+
+## Phase 2 backend usage
+- With normal Python: `python -m pip install -r requirements.txt`, then `python app.py`.
+- Available local runtime: `& '.tools/python/python.exe' app.py`.
+- Flask listens at `http://127.0.0.1:5050`; running `app.py` creates missing tables before the server starts and preserves existing matches.
+- Test command: `python -m unittest discover -s tests -v`, or the portable-runtime command recorded above.
+- GET `/matches` returns all matches; optional `city` filters by a trimmed, case-insensitive city name. GET `/matches/export` returns all saved matches for the future report helper.
+- POST `/matches/add` returns 201 with `success`, `message`, and `match_id`. POST edit/delete return 200 with `success` and `message`.
+- Invalid input returns JSON 400; unknown IDs/routes return JSON 404; incorrect methods return JSON 405; database failures return a clear JSON 500.
+- Name, city, and court are required and limited to 100 characters. Date must be a real YYYY-MM-DD value. Skill must be Beginner, Intermediate, or Advanced. All fields are trimmed.
 
 ## Phase 1 Git commands
 Run from the project root; the assistant is authorized to execute these commands:
@@ -98,7 +125,16 @@ git commit -m "Complete phase 1 project setup and SQLite helper"
 git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
+## Phase 2 Git commands
+Run from the project root; assistant execution is authorized:
+```powershell
+git status
+git add .
+git commit -m "Complete phase 2 Flask match API and validation"
+git push -u origin revert-3-fix-vercel-postgres-migration
+```
+
 ## Upcoming steps
-1. Commit and push Phase 1 using the commands above, then verify the remote branch.
-2. Phase 2 is approved. Present its detailed plan and implement only the Flask backend after the Phase 1 push succeeds.
-3. Verify and push Phase 2, update this tracker, and request approval before Phase 3.
+1. Commit and push the verified Phase 2 implementation, then verify the remote branch.
+2. Request explicit approval before starting Phase 3; no GUI code has been written.
+3. After approval, read this tracker, present the detailed Phase 3 plan, and build only the Tkinter GUI and HTTP client.
