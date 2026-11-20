@@ -53,11 +53,11 @@ To rebuild after committing and pushing any later edits, run from the project ro
 git status
 git push -u origin revert-3-fix-vercel-postgres-migration
 New-Item -ItemType Directory -Path submission -Force | Out-Null
-git archive --format=zip --output=submission/Project_451000573.zip HEAD
+git -c core.autocrlf=false archive --format=zip --output=submission/Project_451000573.zip HEAD
 git rev-parse HEAD
 ```
 
-Git archive uses the committed version. Commit later edits before rebuilding. The ZIP is kept outside Git to avoid including an archive inside itself.
+Git archive uses the committed version. The one-command `core.autocrlf=false` setting preserves the exact stored file bytes on Windows. Commit later edits before rebuilding. The ZIP is kept outside Git to avoid including an archive inside itself.
 
 ## Final student actions
 

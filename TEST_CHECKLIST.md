@@ -116,6 +116,6 @@ PASS: the documented `app.py` and `gui.py` entry points started using that envir
 - [x] Prepare and visually inspect all seven PDF slides with student details.
 - [x] Send the private-repository invitation to `majedoh`; it is pending acceptance.
 - [x] Include the supplied student name and ID in the submission materials.
-- [ ] Build and compare the final ZIP with the pushed Git commit.
+- [x] Build Project_451000573.zip from the pushed Git commit and compare all 18 included files byte for byte. Git archive uses core.autocrlf=false to preserve stored line endings on Windows.
 - [ ] Confirm the instructor accepted the invitation.
 - [ ] Confirm the Blackboard deadline/presentation schedule, upload the ZIP and text, and check the submission receipt.

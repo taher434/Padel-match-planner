@@ -55,13 +55,13 @@
 - Exact deadline and presentation schedule come from Blackboard; do not invent them.
 
 ## Phase status
-- Completed phases: Phases 1, 2, 3, and 4.
+- Completed phases: Phases 1, 2, 3, 4, and 5.
 - Phase 1: COMPLETE on 2026-11-20; all eight database tests passed.
 - Phase 2: COMPLETE on 2026-11-20; 21 automated tests and real HTTP checks passed.
 - Phase 3: COMPLETE on 2026-11-20; all 44 automated tests, live GUI/server checks, and visible-window inspection passed.
 - Phase 4: COMPLETE on 2026-11-20; all 52 automated tests and the live report/GUI/server checks passed.
-- Phase 5: IN PROGRESS; approved by the user on 2026-11-20 with student name and ID supplied.
-- GitHub sync: Phase 1 commit `a2ae26c`, Phase 2 implementation commit `0969603`, Phase 3 implementation commit `35e7a44`, and Phase 4 implementation commit `1beaa92` were pushed and verified on `origin/revert-3-fix-vercel-postgres-migration`. This tracker records the completed sync.
+- Phase 5: COMPLETE on 2026-11-20; final documentation/slides, clean-copy setup, all 52 tests, startup checks, and the 18-file submission archive verification passed.
+- GitHub sync: Phase 1 commit `a2ae26c`, Phase 2 implementation commit `0969603`, Phase 3 implementation commit `35e7a44`, Phase 4 implementation commit `1beaa92`, and Phase 5 materials commit `aa38f95` were pushed and verified on `origin/revert-3-fix-vercel-postgres-migration`. The final verification record and ZIP use the final branch HEAD.
 
 ## Phase 1 detailed plan
 1. Inspect the assignment, available files, repository, and local Python runtime.
@@ -154,12 +154,14 @@
 - PASS: stopping Flask made the report CLI exit with status 1 without changing the previous report file. Restarting Flask restored successful reporting. A real file error after fetching records returned a clear failure.
 - PASS: live GUI Add/View/Filter/Edit/Delete, 400/404 messages, cancel/confirm deletion, and the empty final state. Live checks used temporary records/reports and closed their temporary processes; project data was untouched.
 - `TEST_CHECKLIST.md` records actual results, distinguishes simulated timeouts/dialog choices from live checks, and provides repeatable application/report steps.
-- Phase 5 files are prepared: README.md, DEMO_GUIDE.md, SUBMISSION.md, and output/pdf/Padel_Match_Planner_451000573.pdf. They include the supplied student identity, setup/run/report instructions, course-topic mapping, assistance credits, a timed 10-minute demo, and 3-minute code-understanding practice.
+- Phase 5 files are complete: README.md, DEMO_GUIDE.md, SUBMISSION.md, and output/pdf/Padel_Match_Planner_451000573.pdf. They include the supplied student identity, setup/run/report instructions, course-topic mapping, assistance credits, a timed 10-minute demo, and 3-minute code-understanding practice.
 - PASS: all seven PDF slides were rendered and visually inspected; their text and student details fit without clipping.
 - PASS: clean-copy README setup using an isolated full Python 3.13.12 runtime, a new virtual environment, and installation only from requirements.txt; all 52 tests passed again.
 - PASS: actual app.py/gui.py/report_helper.py entry points in that clean environment, GUI Add/Filter/Delete, and UTF-8 report contents. Imports were verified to come from the clean copy/environment, and its processes were stopped afterward.
 - The repository was verified private. A collaborator invitation to majedoh was sent and verified pending acceptance. Instructor access is not confirmed until it is accepted.
-- submission/ is ignored by Git. Final ZIP creation and byte-for-byte comparison with the pushed Git commit are the remaining Phase 5 packaging steps.
+- PASS: submission/Project_451000573.zip contains all 18 tracked project files, including the presentation PDF. Every file was compared byte for byte with Git, and the archive's commit comment matched its source commit.
+- Packaging uses `git -c core.autocrlf=false archive` to preserve Git's stored line endings on Windows. The archive is rebuilt from final HEAD after the completion record is pushed.
+- PASS: archive checks excluded Git internals, local tools, environments, caches, generated databases/reports, private configuration, keys, and nested ZIP output. submission/ is ignored by Git.
 
 ## Phase 2 backend usage
 - With normal Python: `python -m pip install -r requirements.txt`, then `python app.py`.
@@ -187,6 +189,15 @@
 - A successful run replaces the previous report with a fresh snapshot of all saved matches. An empty database produces a useful empty report. A failed HTTP request leaves an older report unchanged.
 - Flow: `save_report` -> `client.send_request("/matches/export")` -> one `threading.Thread(target=write_report)` -> `.start()` -> UTF-8 file writing with `with open` -> `.join()` -> result dictionary -> `main` prints success/failure.
 - `write_report()` catches expected `OSError` file failures. The helper returns exit status 0 on success or 1 on failure.
+
+## Phase 5 handoff
+- Student: Taher Ramzi Taher Farhan Almaghrebi, ID 451000573.
+- Blackboard ZIP: submission/Project_451000573.zip.
+- Slides: output/pdf/Padel_Match_Planner_451000573.pdf (seven slides, visually checked).
+- README.md contains setup, run/report commands, validation rules, topic-to-code mapping, test results, and credits.
+- DEMO_GUIDE.md contains the 10-minute demo timeline, Add-action trace, 3-minute understanding practice, and small code-change exercises.
+- SUBMISSION.md contains ready-to-copy Blackboard text, archive rebuild commands, and the private-repository access status.
+- All requested project preparation phases are complete. Blackboard upload, deadline/schedule confirmation, rehearsal, course-policy confirmation, and instructor invitation acceptance are remaining student/instructor actions; they have not been claimed as completed.
 
 ## Phase 1 Git commands
 Executed successfully from the project root; retained as the Phase 1 command record:
@@ -224,7 +235,18 @@ git commit -m "Complete phase 4 threaded report helper and verification checklis
 git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
-## Upcoming steps
-1. Commit/push the verified Phase 5 materials and create/verify Project_451000573.zip from that commit.
-2. Record the successful packaging verification, push the final tracker confirmation, and rebuild/verify the final ZIP from the latest commit.
-3. Report completion and identify instructor acceptance, Blackboard deadline/schedule confirmation, rehearsal, and upload as remaining student actions.
+## Phase 5 Git commands
+Executed successfully from the project root; retained as the Phase 5 command record:
+```powershell
+git status
+git add .
+git commit -m "Complete phase 5 documentation and submission materials"
+git push -u origin revert-3-fix-vercel-postgres-migration
+```
+
+## Remaining student actions
+1. Confirm that GitHub user majedoh accepts the private-repository invitation and can access the submission branch.
+2. Check the exact Blackboard deadline and presentation schedule.
+3. Review the code, rehearse the demo/Q&A, and follow the course policy on outside/AI assistance; assistance is disclosed in the materials.
+4. Upload Project_451000573.zip with the student name, ID, and GitHub text from SUBMISSION.md, then confirm the Blackboard receipt.
+5. If changing the project afterward, commit/push those changes and rebuild the ZIP from the same final commit before submitting.
