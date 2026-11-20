@@ -3,6 +3,7 @@
 ## Project
 - Course: Advanced Programming 462, College of Computer Science and Information Systems.
 - Instructor: Dr. Majed Hariri. Work: individual university project.
+- Student: Taher Ramzi Taher Farhan Almaghrebi. Student ID: `451000573` (supplied by the user for Phase 5).
 - Goal: save local padel matches and filter them by city using code the student can explain and adjust during the 3-minute understanding check.
 - Repository: https://github.com/taher434/Padel-match-planner.git
 - Required branch: `revert-3-fix-vercel-postgres-migration`.
@@ -59,7 +60,7 @@
 - Phase 2: COMPLETE on 2026-11-20; 21 automated tests and real HTTP checks passed.
 - Phase 3: COMPLETE on 2026-11-20; all 44 automated tests, live GUI/server checks, and visible-window inspection passed.
 - Phase 4: COMPLETE on 2026-11-20; all 52 automated tests and the live report/GUI/server checks passed.
-- Phase 5: NOT STARTED; requires approval.
+- Phase 5: IN PROGRESS; approved by the user on 2026-11-20 with student name and ID supplied.
 - GitHub sync: Phase 1 commit `a2ae26c`, Phase 2 implementation commit `0969603`, Phase 3 implementation commit `35e7a44`, and Phase 4 implementation commit `1beaa92` were pushed and verified on `origin/revert-3-fix-vercel-postgres-migration`. This tracker records the completed sync.
 
 ## Phase 1 detailed plan
@@ -103,6 +104,16 @@
 7. Create `TEST_CHECKLIST.md` with repeatable end-to-end steps, actual results, and a clear distinction between completed checks and Phase 5 submission work.
 8. Update this tracker, commit/push Phase 4, verify the remote branch, and request approval before Phase 5.
 
+## Phase 5 detailed plan
+1. Write README.md with the project purpose, student/course details, exact setup/table/run/report commands, validation rules, topic-to-code mapping, test results, and assistance credits.
+2. Create DEMO_GUIDE.md with a timed presentation/demo of at most 10 minutes, a 3-minute code-understanding practice section, and small code-change exercises.
+3. Create and visually verify PDF slides containing the supplied student identity, architecture, demo steps, request/database flow, threading, and test evidence.
+4. Create SUBMISSION.md with the exact ZIP name, ready-to-copy Blackboard text, instructor-access guidance based on verified repository visibility, and the remaining student actions.
+5. Verify setup from a clean copy using an isolated full Python virtual environment, then run the complete test suite and check Flask, Tkinter, and report behavior there.
+6. Keep local tools, environments, caches, databases, generated reports, secrets, and the ZIP output directory out of Git. Keep the final slides in Git so the submission matches.
+7. Commit/push Phase 5, verify GitHub matches local HEAD, create submission/Project_451000573.zip directly from that final commit, and compare every archive entry with Git's tracked source bytes.
+8. Output the complete updated tracker and exact Git commands. Report remaining Blackboard upload, deadline/schedule confirmation, and any unverified access actions accurately.
+
 ## Inspection findings
 - The workspace initially contained only the assignment DOCX; there was no Git repository or PROGRESS.md.
 - GitHub ref queries returned no branches or other refs. The local target branch was initialized and `origin` now points to the requested repository.
@@ -142,7 +153,13 @@
 - PASS: both Flask and Tkinter were stopped and restarted; the recreated GUI showed unchanged saved records. A separate outage check retained the same GUI root and input, then retried successfully after Flask restarted.
 - PASS: stopping Flask made the report CLI exit with status 1 without changing the previous report file. Restarting Flask restored successful reporting. A real file error after fetching records returned a clear failure.
 - PASS: live GUI Add/View/Filter/Edit/Delete, 400/404 messages, cancel/confirm deletion, and the empty final state. Live checks used temporary records/reports and closed their temporary processes; project data was untouched.
-- `TEST_CHECKLIST.md` records actual results, distinguishes simulated timeouts/dialog choices from live checks, and provides repeatable application/report steps. Final README, credits, demo/Q&A materials, slides, and submission preparation remain for Phase 5.
+- `TEST_CHECKLIST.md` records actual results, distinguishes simulated timeouts/dialog choices from live checks, and provides repeatable application/report steps.
+- Phase 5 files are prepared: README.md, DEMO_GUIDE.md, SUBMISSION.md, and output/pdf/Padel_Match_Planner_451000573.pdf. They include the supplied student identity, setup/run/report instructions, course-topic mapping, assistance credits, a timed 10-minute demo, and 3-minute code-understanding practice.
+- PASS: all seven PDF slides were rendered and visually inspected; their text and student details fit without clipping.
+- PASS: clean-copy README setup using an isolated full Python 3.13.12 runtime, a new virtual environment, and installation only from requirements.txt; all 52 tests passed again.
+- PASS: actual app.py/gui.py/report_helper.py entry points in that clean environment, GUI Add/Filter/Delete, and UTF-8 report contents. Imports were verified to come from the clean copy/environment, and its processes were stopped afterward.
+- The repository was verified private. A collaborator invitation to majedoh was sent and verified pending acceptance. Instructor access is not confirmed until it is accepted.
+- submission/ is ignored by Git. Final ZIP creation and byte-for-byte comparison with the pushed Git commit are the remaining Phase 5 packaging steps.
 
 ## Phase 2 backend usage
 - With normal Python: `python -m pip install -r requirements.txt`, then `python app.py`.
@@ -208,6 +225,6 @@ git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
 ## Upcoming steps
-1. Await explicit approval before starting Phase 5.
-2. After approval, read this tracker, present the detailed Phase 5 plan, and prepare the final documentation, demonstration, and submission materials.
-3. Verify and push Phase 5, update this tracker, and report any remaining student/Blackboard actions accurately.
+1. Commit/push the verified Phase 5 materials and create/verify Project_451000573.zip from that commit.
+2. Record the successful packaging verification, push the final tracker confirmation, and rebuild/verify the final ZIP from the latest commit.
+3. Report completion and identify instructor acceptance, Blackboard deadline/schedule confirmation, rehearsal, and upload as remaining student actions.

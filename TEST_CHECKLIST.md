@@ -103,10 +103,19 @@ In the prepared local workspace:
 - `.join()` waits for the worker to finish before the main thread reads that dictionary.
 - `main()` prints the result and returns status 0 for success or 1 for failure.
 
-## Remaining Phase 5 submission checks
+## Phase 5 clean setup verification
 
-- [ ] Follow the final README from a clean checkout with Python/Tkinter installed.
-- [ ] Finish the course-topic mapping, assistance credits, demo notes, and Q&A guide.
-- [ ] Prepare the required slides and final ZIP.
-- [ ] Verify instructor access if the repository is private.
-- [ ] Confirm student details, Blackboard deadline, and matching final versions in GitHub and the ZIP.
+PASS on 2026-11-20: the staged source was exported to a clean folder, a normal Python 3.13.12 virtual environment was created, and only `requirements.txt` was installed. All 52 tests passed in that environment.
+
+PASS: the documented `app.py` and `gui.py` entry points started using that environment. The copied GUI added, filtered, and deleted a test match through the copied backend, and `report_helper.py` saved the expected UTF-8 report. Verification confirmed imports came from the clean copy/environment. Its processes were stopped afterward.
+
+## Final submission status
+
+- [x] Follow the README setup from a clean copy with Python/Tkinter and run all 52 tests.
+- [x] Finish the course-topic mapping, assistance credits, demo notes, and Q&A guide.
+- [x] Prepare and visually inspect all seven PDF slides with student details.
+- [x] Send the private-repository invitation to `majedoh`; it is pending acceptance.
+- [x] Include the supplied student name and ID in the submission materials.
+- [ ] Build and compare the final ZIP with the pushed Git commit.
+- [ ] Confirm the instructor accepted the invitation.
+- [ ] Confirm the Blackboard deadline/presentation schedule, upload the ZIP and text, and check the submission receipt.

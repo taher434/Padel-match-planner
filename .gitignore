@@ -18,6 +18,9 @@ __pycache__/
 *.sqlite3-shm
 reports/
 
+# Blackboard ZIPs are built from the final Git commit
+submission/
+
 # Private configuration and keys
 .env
 .env.*
