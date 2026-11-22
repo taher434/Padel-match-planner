@@ -109,6 +109,12 @@ PASS on 2026-11-20: the staged source was exported to a clean folder, a normal P
 
 PASS: the documented `app.py` and `gui.py` entry points started using that environment. The copied GUI added, filtered, and deleted a test match through the copied backend, and `report_helper.py` saved the expected UTF-8 report. Verification confirmed imports came from the clean copy/environment. Its processes were stopped afterward.
 
+## Local run environment recheck
+
+PASS on 2026-11-23: VS Code's configured Python 3.14.2 installation had Tkinter but no Flask. A project-root `.venv` was created from that interpreter and `requirements.txt` was installed there. All 52 tests passed in the new environment.
+
+PASS: `.vscode/settings.json` points Code Runner to that environment. The exact configured command started `app.py`, and GET `/matches` returned successful JSON with status 200. The verification process was stopped afterward. The README explains the matching interpreter and two-terminal startup steps.
+
 ## Final submission status
 
 - [x] Follow the README setup from a clean copy with Python/Tkinter and run all 52 tests.
@@ -116,6 +122,6 @@ PASS: the documented `app.py` and `gui.py` entry points started using that envir
 - [x] Prepare and visually inspect all seven PDF slides with student details.
 - [x] Send the private-repository invitation to `majedoh`; it is pending acceptance.
 - [x] Include the supplied student name and ID in the submission materials.
-- [x] Build Project_451000573.zip from the pushed Git commit and compare all 18 included files byte for byte. Git archive uses core.autocrlf=false to preserve stored line endings on Windows.
+- [x] Build Project_451000573.zip from the pushed Git commit and compare every tracked file byte for byte. The updated package includes the VS Code configuration. Git archive uses core.autocrlf=false to preserve stored line endings on Windows.
 - [ ] Confirm the instructor accepted the invitation.
 - [ ] Confirm the Blackboard deadline/presentation schedule, upload the ZIP and text, and check the submission receipt.

@@ -61,6 +61,7 @@
 - Phase 3: COMPLETE on 2026-11-20; all 44 automated tests, live GUI/server checks, and visible-window inspection passed.
 - Phase 4: COMPLETE on 2026-11-20; all 52 automated tests and the live report/GUI/server checks passed.
 - Phase 5: COMPLETE on 2026-11-20; final documentation/slides, clean-copy setup, all 52 tests, startup checks, and the 18-file submission archive verification passed.
+- Post-completion setup fix: COMPLETE on 2026-11-23; project-root Python 3.14.2 environment, VS Code Code Runner configuration, all 52 tests, and real Flask startup verified.
 - GitHub sync: Phase 1 commit `a2ae26c`, Phase 2 implementation commit `0969603`, Phase 3 implementation commit `35e7a44`, Phase 4 implementation commit `1beaa92`, and Phase 5 materials commit `aa38f95` were pushed and verified on `origin/revert-3-fix-vercel-postgres-migration`. The final verification record and ZIP use the final branch HEAD.
 
 ## Phase 1 detailed plan
@@ -119,7 +120,7 @@
 - GitHub ref queries returned no branches or other refs. The local target branch was initialized and `origin` now points to the requested repository.
 - The assignment was read without modification and agrees with the requested Tkinter/Flask/SQLite architecture.
 - No Python command was found on PATH. Official portable Python 3.13.12 was downloaded into Git-ignored `.tools/` for verification without a system installation; its SHA-256 matched the official release.
-- Flask and its dependencies are installed only in ignored `.tools/packages/`. The matching official Python 3.13.12 Tkinter component was downloaded, its Python Software Foundation signature verified, and its files extracted into ignored local tools without a system Python installation. The local runtime now supports both Flask and Tkinter 8.6.
+- Initial verification dependencies were installed in ignored `.tools/packages/`. The matching official Python 3.13.12 Tkinter component was downloaded, its Python Software Foundation signature verified, and its files extracted into ignored local tools. That runtime supports both Flask and Tkinter 8.6. The later local-run repair also installed requirements into the project-root `.venv` using the student's Python 3.14.2 installation.
 
 ## Verification results
 - Created `db.py`, `requirements.txt`, `.gitignore`, and `tests/test_db.py`.
@@ -159,7 +160,7 @@
 - PASS: clean-copy README setup using an isolated full Python 3.13.12 runtime, a new virtual environment, and installation only from requirements.txt; all 52 tests passed again.
 - PASS: actual app.py/gui.py/report_helper.py entry points in that clean environment, GUI Add/Filter/Delete, and UTF-8 report contents. Imports were verified to come from the clean copy/environment, and its processes were stopped afterward.
 - The repository was verified private. A collaborator invitation to majedoh was sent and verified pending acceptance. Instructor access is not confirmed until it is accepted.
-- PASS: submission/Project_451000573.zip contains all 18 tracked project files, including the presentation PDF. Every file was compared byte for byte with Git, and the archive's commit comment matched its source commit.
+- PASS: submission/Project_451000573.zip contains all tracked project files, including the presentation PDF. Every file was compared byte for byte with Git, and the archive's commit comment matched its source commit. The original package had 18 files; the setup fix adds the VS Code configuration.
 - Packaging uses `git -c core.autocrlf=false archive` to preserve Git's stored line endings on Windows. The archive is rebuilt from final HEAD after the completion record is pushed.
 - PASS: archive checks excluded Git internals, local tools, environments, caches, generated databases/reports, private configuration, keys, and nested ZIP output. submission/ is ignored by Git.
 
@@ -241,6 +242,25 @@ Executed successfully from the project root; retained as the Phase 5 command rec
 git status
 git add .
 git commit -m "Complete phase 5 documentation and submission materials"
+git push -u origin revert-3-fix-vercel-postgres-migration
+```
+
+## Local run repair on 2026-11-23
+- Reported issue: app.py failed with ModuleNotFoundError for flask when launched from VS Code.
+- Plan: identify the interpreter, create the project environment, install requirements, configure Code Runner, verify the application, and refresh GitHub/the submission archive.
+- Confirmed cause: VS Code's configured Python 3.14.2 had Tkinter 8.6 but no Flask, and no project-root .venv existed.
+- Created .venv from the installed Python 3.14.2 and installed requirements.txt there. The environment remains ignored by Git and excluded from the ZIP.
+- Added .vscode/settings.json with a workspace-relative environment path and Code Runner executor. The README includes the matching install/run commands and Python: Select Interpreter guidance for the Python extension.
+- PASS: all 52 existing tests in the new root environment with Flask 3.1.3 and Tkinter 8.6.
+- PASS: the exact configured Code Runner command started app.py and GET /matches returned JSON 200. The check read records without editing them and stopped its own server process afterward.
+- Application Python logic is unchanged. The current submission package has 19 tracked files, including .vscode/settings.json, and is rebuilt from the updated pushed commit with byte-for-byte Git verification.
+- Run Flask first: `.\.venv\Scripts\python.exe app.py`. In a second terminal, run `.\.venv\Scripts\python.exe gui.py`.
+
+Repair Git commands:
+```powershell
+git status
+git add .
+git commit -m "Fix VS Code Python environment setup"
 git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 

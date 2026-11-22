@@ -32,7 +32,7 @@ The GUI and report helper communicate with Flask automatically. All application 
 
 ## Setup on Windows with PowerShell
 
-Install Git and a full Python 3.13 installation with pip and Tcl/Tk. Python 3.13.12 is the tested version. Python downloads are available from [Python.org](https://www.python.org/downloads/windows/).
+Install Git and a full Python 3.13 or 3.14 installation with pip and Tcl/Tk. Tested versions are Python 3.13.12 and 3.14.2. Python downloads are available from [Python.org](https://www.python.org/downloads/windows/).
 
 If using GitHub, clone the submission branch and enter its folder:
 
@@ -54,6 +54,18 @@ python -m venv .venv
 These commands use the environment's Python directly, so activating a PowerShell script is unnecessary. Python's [venv documentation](https://docs.python.org/3.13/library/venv.html) explains how the environment isolates packages.
 
 Flask is the only third-party application dependency. Tkinter, SQLite, urllib, JSON, threading, and file handling come with Python. If `python` is not found, finish the Python installation and open a new terminal.
+
+### VS Code and a missing Flask error
+
+Open the whole project folder in VS Code and finish the environment setup above. The project's `.vscode/settings.json` points Code Runner's **Run Code** command to `.venv\Scripts\python.exe`. It also sets that path as the Python extension's default interpreter.
+
+If `app.py` reports `ModuleNotFoundError: No module named 'flask'`, install the dependency using the same environment that runs the file:
+
+```powershell
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+For the Python extension's **Run Python File** command, use **Python: Select Interpreter** and select the project's `.venv` if another interpreter is already selected. Use the two terminal commands below to keep Flask and the GUI running together.
 
 ## Start Flask first
 
@@ -151,7 +163,7 @@ Run the test suite from the project folder:
 .\.venv\Scripts\python.exe -m unittest discover -s tests -v
 ```
 
-All **52 tests passed** on Windows with Python 3.13.12, Flask 3.1.3, and Tkinter 8.6: 8 database, 13 API, 11 client, 12 GUI, and 8 report/thread/file tests.
+All **52 tests passed** on Windows with Python 3.13.12 and again with Python 3.14.2, using Flask 3.1.3 and Tkinter 8.6: 8 database, 13 API, 11 client, 12 GUI, and 8 report/thread/file tests.
 
 Live integration checks also passed for complete record actions, city filtering, 400/404 errors, connection recovery in the same GUI, persistence after restarting both programs, UTF-8 reports, and report/file failures. Tests use temporary data. Simulated timeout/dialog checks are distinguished from live checks in [TEST_CHECKLIST.md](TEST_CHECKLIST.md).
 
@@ -166,6 +178,7 @@ client.py                  Shared HTTP request functions
 gui.py                     Tkinter window and callbacks
 report_helper.py           One-thread UTF-8 report helper
 requirements.txt           Flask dependency
+.vscode/settings.json      Project interpreter and Code Runner configuration
 tests/                     Automated tests
 README.md                  Setup, behavior, and course-topic map
 TEST_CHECKLIST.md          Results and repeatable checks
