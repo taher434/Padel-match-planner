@@ -37,15 +37,17 @@ Before the deadline, check GitHub repository Settings, Collaborators, and confir
 
 - All application source: `app.py`, `db.py`, `client.py`, `gui.py`, and `report_helper.py`.
 - Table setup in `db.py`, called automatically when `app.py` starts.
-- `requirements.txt`, README, tests, verification checklist, progress tracker, demo/Q&A guide, and this submission guide.
+- `README.md` with setup, run/report commands, topic locations, test results, and credits.
+- `requirements.txt` with the application dependency.
 - The seven-slide PDF: `output/pdf/Padel_Match_Planner_451000573.pdf`.
-- Git ignore rules.
 
-No sample database is required. The application creates its database and table automatically. Environments, caches, Git internals, local tooling, generated reports/databases, private configuration, and the ZIP output folder are excluded.
+These are eight files in total. No sample database is required. The application creates its database and table automatically. Development tests, editor configuration, progress records, and extra guides stay in the development repository and are not included in the hand-in copy. Environments, caches, Git internals, local tooling, generated reports/databases, private configuration, and the ZIP output folder are excluded.
+
+An extracted copy of the same eight files is available locally at `submission/Project_451000573/`. Upload the ZIP to Blackboard.
 
 ## How the ZIP matches GitHub
 
-The ZIP is created with Git archive from the final committed and pushed source. It contains that commit's tracked file bytes, including the presentation PDF. Its Git archive comment records the source commit.
+The ZIP is created with Git archive from the final committed and pushed source. It contains only the eight required files, with each file's bytes matching its Git version. Its Git archive comment records the source commit.
 
 To rebuild after committing and pushing any later edits, run from the project root:
 
@@ -53,7 +55,12 @@ To rebuild after committing and pushing any later edits, run from the project ro
 git status
 git push -u origin revert-3-fix-vercel-postgres-migration
 New-Item -ItemType Directory -Path submission -Force | Out-Null
-git -c core.autocrlf=false archive --format=zip --output=submission/Project_451000573.zip HEAD
+$requiredFiles = @(
+    'app.py', 'db.py', 'client.py', 'gui.py', 'report_helper.py',
+    'README.md', 'requirements.txt',
+    'output/pdf/Padel_Match_Planner_451000573.pdf'
+)
+git -c core.autocrlf=false archive --format=zip --output=submission/Project_451000573.zip HEAD @requiredFiles
 git rev-parse HEAD
 ```
 

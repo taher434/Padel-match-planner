@@ -57,7 +57,7 @@ Flask is the only third-party application dependency. Tkinter, SQLite, urllib, J
 
 ### VS Code and a missing Flask error
 
-Open the whole project folder in VS Code and finish the environment setup above. The project's `.vscode/settings.json` points Code Runner's **Run Code** command to `.venv\Scripts\python.exe`. It also sets that path as the Python extension's default interpreter.
+Open the whole project folder in VS Code and finish the environment setup above. Use **Python: Select Interpreter** to select `.venv\Scripts\python.exe`.
 
 If `app.py` reports `ModuleNotFoundError: No module named 'flask'`, install the dependency using the same environment that runs the file:
 
@@ -157,19 +157,15 @@ Success replies contain `success: true`. Failed requests contain `success: false
 
 ## Verification
 
-Run the test suite from the project folder:
-
-```powershell
-.\.venv\Scripts\python.exe -m unittest discover -s tests -v
-```
-
 All **52 tests passed** on Windows with Python 3.13.12 and again with Python 3.14.2, using Flask 3.1.3 and Tkinter 8.6: 8 database, 13 API, 11 client, 12 GUI, and 8 report/thread/file tests.
 
-Live integration checks also passed for complete record actions, city filtering, 400/404 errors, connection recovery in the same GUI, persistence after restarting both programs, UTF-8 reports, and report/file failures. Tests use temporary data. Simulated timeout/dialog checks are distinguished from live checks in [TEST_CHECKLIST.md](TEST_CHECKLIST.md).
+Live integration checks also passed for complete record actions, city filtering, 400/404 errors, connection recovery in the same GUI, persistence after restarting both programs, UTF-8 reports, and report/file failures. Tests use temporary data. Timeout exceptions and confirmation choices were also tested with controlled simulated results.
+
+The development test source is available in the [GitHub tests folder](https://github.com/taher434/Padel-match-planner/tree/revert-3-fix-vercel-postgres-migration/tests). Test files are not needed to run the submitted application.
 
 Phase 5 verification repeated the setup in a clean copy: a new `.venv`, installation only from `requirements.txt`, all 52 tests, and the documented `app.py`, `gui.py`, and `report_helper.py` entry points. The copied application used its own database and report files.
 
-## Project files
+## Submitted files
 
 ```text
 app.py                     Flask routes and validation
@@ -178,23 +174,17 @@ client.py                  Shared HTTP request functions
 gui.py                     Tkinter window and callbacks
 report_helper.py           One-thread UTF-8 report helper
 requirements.txt           Flask dependency
-.vscode/settings.json      Project interpreter and Code Runner configuration
-tests/                     Automated tests
 README.md                  Setup, behavior, and course-topic map
-TEST_CHECKLIST.md          Results and repeatable checks
-DEMO_GUIDE.md               Timed demo and code-understanding practice
-SUBMISSION.md               Blackboard text and final submission steps
-output/pdf/                 Presentation PDF
-PROGRESS.md                 Project rules, phases, and completed work
+output/pdf/Padel_Match_Planner_451000573.pdf  Presentation slides
 ```
 
 The SQLite database and report directory are created when needed. Virtual environments, caches, local verification tools, generated data/reports, private configuration, and ZIP output are ignored by Git.
 
 ## Presentation and submission
 
-Use [DEMO_GUIDE.md](DEMO_GUIDE.md) to rehearse the presentation and [SUBMISSION.md](SUBMISSION.md) for the final Blackboard steps. The slides are in `output/pdf/Padel_Match_Planner_451000573.pdf`.
+The slides are in `output/pdf/Padel_Match_Planner_451000573.pdf`. The presentation and live demo allow up to 10 minutes together, followed by 3 minutes of questions and a code-understanding check.
 
-The required archive is `Project_451000573.zip`. It is generated from the final Git commit so the included source and slides match GitHub. Its local output folder, `submission/`, is ignored by Git.
+Upload one archive named `Project_451000573.zip` to Blackboard. Include the student name, student ID, and GitHub link in the submission text. The eight submitted files above come from the final Git commit, so their contents match GitHub. No pre-existing data file is required: Flask creates the database and tables automatically. The local ZIP output folder, `submission/`, is ignored by Git.
 
 ## Credits
 

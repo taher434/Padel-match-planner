@@ -122,6 +122,6 @@ PASS: `.vscode/settings.json` points Code Runner to that environment. The exact 
 - [x] Prepare and visually inspect all seven PDF slides with student details.
 - [x] Send the private-repository invitation to `majedoh`; it is pending acceptance.
 - [x] Include the supplied student name and ID in the submission materials.
-- [x] Build Project_451000573.zip from the pushed Git commit and compare every tracked file byte for byte. The updated package includes the VS Code configuration. Git archive uses core.autocrlf=false to preserve stored line endings on Windows.
+- [x] Build Project_451000573.zip from the pushed Git commit using the eight required submission files listed in SUBMISSION.md, and compare each file byte for byte. Git archive uses core.autocrlf=false to preserve stored line endings on Windows.
 - [ ] Confirm the instructor accepted the invitation.
 - [ ] Confirm the Blackboard deadline/presentation schedule, upload the ZIP and text, and check the submission receipt.

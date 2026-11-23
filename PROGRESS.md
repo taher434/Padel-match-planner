@@ -253,7 +253,7 @@ git push -u origin revert-3-fix-vercel-postgres-migration
 - Added .vscode/settings.json with a workspace-relative environment path and Code Runner executor. The README includes the matching install/run commands and Python: Select Interpreter guidance for the Python extension.
 - PASS: all 52 existing tests in the new root environment with Flask 3.1.3 and Tkinter 8.6.
 - PASS: the exact configured Code Runner command started app.py and GET /matches returned JSON 200. The check read records without editing them and stopped its own server process afterward.
-- Application Python logic is unchanged. The current submission package has 19 tracked files, including .vscode/settings.json, and is rebuilt from the updated pushed commit with byte-for-byte Git verification.
+- Application Python logic is unchanged. That repair's submission package had 19 tracked files, including .vscode/settings.json, and was rebuilt from the updated pushed commit with byte-for-byte Git verification. The required-only package below supersedes it.
 - Run Flask first: `.\.venv\Scripts\python.exe app.py`. In a second terminal, run `.\.venv\Scripts\python.exe gui.py`.
 
 Repair Git commands:
@@ -261,6 +261,25 @@ Repair Git commands:
 git status
 git add .
 git commit -m "Fix VS Code Python environment setup"
+git push -u origin revert-3-fix-vercel-postgres-migration
+```
+
+## Required-only submission copy on 2026-11-23
+- User request: read the assignment and prepare copies of only the instructor's required submission materials.
+- Plan: extract the submission rules, select the required application files, make README self-contained, and build a separate folder and ZIP from the same final GitHub version.
+- Required Blackboard delivery: one ZIP named Project_451000573.zip; write the student name, ID, and GitHub link in the submission text.
+- The eight files are app.py, db.py, client.py, gui.py, report_helper.py, README.md, requirements.txt, and output/pdf/Padel_Match_Planner_451000573.pdf.
+- db.py contains table setup, called by app.py. There is no required pre-existing data file; missing tables are created automatically.
+- README now works with the required-only file set and includes setup, table creation, Flask/Tkinter/report commands, topic locations, test results, and assistance credits.
+- Application Python code and slides are unchanged. Development tests, extra guides, editor settings, and this tracker stay outside the submission copy. The previous README and full ZIP are backed up in ignored .tools.
+- Final output: submission/Project_451000573/ and submission/Project_451000573.zip. Verify exactly eight files, identical folder/ZIP/Git bytes, matching source commit, and no generated data, caches, environments, or passwords.
+- This package supersedes the previous 19-file archive. GitHub retains the development history and extra development materials; the submitted files match the same final version there.
+
+Submission-copy Git commands:
+```powershell
+git status
+git add .
+git commit -m "Prepare required-only Blackboard submission"
 git push -u origin revert-3-fix-vercel-postgres-migration
 ```
 
