@@ -184,10 +184,5 @@ The SQLite database and report directory are created when needed. Virtual enviro
 
 The slides are in `output/pdf/Padel_Match_Planner_451000573.pdf`. The presentation and live demo allow up to 10 minutes together, followed by 3 minutes of questions and a code-understanding check.
 
-Upload one archive named `Project_451000573.zip` to Blackboard. Include the student name, student ID, and GitHub link in the submission text. The eight submitted files above come from the final Git commit, so their contents match GitHub. No pre-existing data file is required: Flask creates the database and tables automatically. The local ZIP output folder, `submission/`, is ignored by Git.
-
-## Credits
-
-Implementation, testing, debugging, documentation, and presentation preparation were developed with OpenAI Codex assistance. Taher must review and understand the submitted work and follow the course policy on AI assistance.
 
 The project uses Flask and Python's standard library. Reference documentation: [Flask](https://flask.palletsprojects.com/en/stable/), [Tkinter](https://docs.python.org/3.13/library/tkinter.html), [urllib](https://docs.python.org/3.13/library/urllib.request.html), [SQLite](https://docs.python.org/3.13/library/sqlite3.html), and [threading](https://docs.python.org/3.13/library/threading.html).
